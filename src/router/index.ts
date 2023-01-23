@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import AddView from "@/views/AddView.vue";
 
 Vue.use(VueRouter);
 
@@ -9,6 +10,11 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "home-view",
     component: HomeView,
+  },
+  {
+    path: "/add/:date/:type",
+    name: "add-view",
+    component: AddView,
   },
   {
     path: "/about",

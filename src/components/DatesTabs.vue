@@ -1,5 +1,5 @@
 <template>
-  <v-tabs show-arrows center-active :value="value" @input="updateModelValue">
+  <v-tabs show-arrows center-active :value="indexOfValue" @change="updateValue">
     <v-tab class="tab" :key="tab.index" v-for="tab in tabs">
       <p class="tab__day">{{ tab.day.slice(0, 3) }}</p>
       <p class="tab__date">{{ tab.date }}</p></v-tab
@@ -8,36 +8,26 @@
 </template>
 
 <script>
-import daysOfWeek from "@/utils/daysOfWeek";
-import dayjs from "dayjs";
+import { mapGetters } from "vuex";
 
 export default {
   props: {
     value: {
-      type: Number,
+      type: String,
     },
   },
   methods: {
-    updateModelValue(event) {
-      this.$emit("input", event.target.value);
+    updateValue(value) {
+      this.$emit("change-day", this.tabs[value].value);
     },
   },
   computed: {
-    tabs() {
-      return Array.from({ length: 15 }).map((_, index, array) => {
-        const offset = index - array.length + 3;
-        let date =
-          offset < 0
-            ? dayjs().subtract(Math.abs(offset), "day")
-            : dayjs().add(offset, "day");
-        return {
-          key: index,
-          value: date.format("DD-MM-YYYY"),
-          date: date.date(),
-          day: daysOfWeek(date.day()),
-        };
-      });
+    indexOfValue() {
+      return this.tabs.findIndex((tab) => tab.value === this.value);
     },
+    ...mapGetters({
+      tabs: "dishList/tabs",
+    }),
   },
 };
 </script>
